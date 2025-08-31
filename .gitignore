@@ -1,0 +1,58 @@
+# =====================
+# Node modules
+# =====================
+# Ignore node_modules inside frontend
+/frontend/node_modules/
+
+# =====================
+# Environment files
+# =====================
+# Keep API keys and secrets out of Git
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development
+/frontend/.env.production
+/frontend/.env.test
+
+# =====================
+# Build output
+# =====================
+/frontend/build/
+/frontend/dist/
+/frontend/.next/
+
+# =====================
+# Logs
+# =====================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =====================
+# OS or IDE files
+# =====================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =====================
+# Misc
+# =====================
+/frontend/.cache/
+*.swp
+node_modules
+
+
+# Backend secrets
+/backend/.env
+
+# Node modules
+/frontend/node_modules/
+
+# Python cache
+/backend/__pycache__/
+*.pyc
+
+# Environment files
+/backend/.env
