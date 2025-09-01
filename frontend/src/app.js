@@ -34,7 +34,7 @@ function App() {
       return alert("Please choose between 5 and 20 questions.");
 
     try {
-      const res = await axios.post(`${API_URL}start_session`, {
+      const res = await axios.post(`${API_URL}/start_session`, {
         num_questions: numQuestions,
       });
 
