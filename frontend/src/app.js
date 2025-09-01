@@ -19,7 +19,7 @@ function App() {
   const startSession = async () => {
     if (numQuestions < 5 || numQuestions > 20) return alert("Please choose between 5 and 20 questions.");
     try {
-      const res = await axios.post("http://127.0.0.1:8000/start_session", { num_questions: numQuestions });
+      const res = await axios.post("https://interview-backend-vel8.onrender.com/start_session", { num_questions: numQuestions });
       setSessionId(res.data.session_id);
       setCurrentQuestion(res.data.question);
       setAnswer("");
@@ -40,7 +40,7 @@ function App() {
     setLoadingNextQuestion(true);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/submit_answer", {
+      const res = await axios.post("https://interview-backend-vel8.onrender.com/submit_answer", {
         session_id: sessionId,
         answer: answer,
       });
