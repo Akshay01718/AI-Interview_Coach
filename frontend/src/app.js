@@ -1,6 +1,14 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 function App() {
   const [sessionId, setSessionId] = useState(null);
@@ -16,10 +24,15 @@ function App() {
   const recognitionRef = useRef(null);
   const [listening, setListening] = useState(false);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const startSession = async () => {
-    if (numQuestions < 5 || numQuestions > 20) return alert("Please choose between 5 and 20 questions.");
+    if (numQuestions < 5 || numQuestions > 20)
+      return alert("Please choose between 5 and 20 questions.");
     try {
-      const res = await axios.post("https://interview-backend-vel8.onrender.com/start_session", { num_questions: numQuestions });
+      const res = await axios.post(`${API_URL}/start_session`, {
+        num_questions: numQuestions,
+      });
       setSessionId(res.data.session_id);
       setCurrentQuestion(res.data.question);
       setAnswer("");
@@ -40,7 +53,7 @@ function App() {
     setLoadingNextQuestion(true);
 
     try {
-      const res = await axios.post("https://interview-backend-vel8.onrender.com/submit_answer", {
+      const res = await axios.post(`${API_URL}/submit_answer`, {
         session_id: sessionId,
         answer: answer,
       });
@@ -50,12 +63,16 @@ function App() {
 
       const newResults = [
         ...results,
-        { question: currentQuestion, answer, score: res.data.score, feedback: res.data.feedback },
+        {
+          question: currentQuestion,
+          answer,
+          score: res.data.score,
+          feedback: res.data.feedback,
+        },
       ];
       setResults(newResults);
 
       if (res.data.next_question) {
-        // small delay for fun effect
         setTimeout(() => {
           setCurrentQuestion(res.data.next_question);
           setAnswer("");
@@ -75,7 +92,8 @@ function App() {
   };
 
   const startListening = () => {
-    if (!("webkitSpeechRecognition" in window)) return alert("Speech recognition not supported.");
+    if (!("webkitSpeechRecognition" in window))
+      return alert("Speech recognition not supported.");
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = false;
     recognitionRef.current.interimResults = false;
@@ -90,12 +108,26 @@ function App() {
     setListening(true);
   };
 
-  const getScoreColor = (score) => (score >= 80 ? "#4caf50" : score >= 50 ? "#ff9800" : "#f44336");
-  const progress = finished ? 100 : questionsCount > 0 ? Math.min((questionsCount / numQuestions) * 100, 100) : 0;
+  const getScoreColor = (score) =>
+    score >= 80 ? "#4caf50" : score >= 50 ? "#ff9800" : "#f44336";
+  const progress = finished
+    ? 100
+    : questionsCount > 0
+    ? Math.min((questionsCount / numQuestions) * 100, 100)
+    : 0;
 
   return (
-    <div style={{ fontFamily: "'Segoe UI', sans-serif", maxWidth: "850px", margin: "auto", padding: "20px" }}>
-      <h1 style={{ textAlign: "center", color: "#333", marginBottom: "40px" }}>AI Interview Coach 🎤</h1>
+    <div
+      style={{
+        fontFamily: "'Segoe UI', sans-serif",
+        maxWidth: "850px",
+        margin: "auto",
+        padding: "20px",
+      }}
+    >
+      <h1 style={{ textAlign: "center", color: "#333", marginBottom: "40px" }}>
+        AI Interview Coach 🎤
+      </h1>
 
       {!sessionId && (
         <div style={{ textAlign: "center" }}>
@@ -197,9 +229,18 @@ function App() {
             </button>
           </div>
 
-          {/* Fun Loading Indicator */}
           {loadingNextQuestion && (
-            <div style={{ marginTop: "15px", fontSize: "16px", fontWeight: "bold", color: "#4caf50", display: "flex", justifyContent: "center", gap: "5px" }}>
+            <div
+              style={{
+                marginTop: "15px",
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "#4caf50",
+                display: "flex",
+                justifyContent: "center",
+                gap: "5px",
+              }}
+            >
               <span>🤖 Thinking</span>
               <span className="dot">.</span>
               <span className="dot">.</span>
@@ -234,7 +275,9 @@ function App() {
           <h3 style={{ marginBottom: "10px", color: "#333" }}>Feedback</h3>
           <p>
             <strong>Score:</strong>{" "}
-            <span style={{ color: getScoreColor(score), fontWeight: "bold" }}>{score.toFixed(1)}</span>
+            <span style={{ color: getScoreColor(score), fontWeight: "bold" }}>
+              {score.toFixed(1)}
+            </span>
           </p>
           <p>
             <strong>AI Suggestions:</strong>
@@ -277,7 +320,9 @@ function App() {
                 </p>
                 <p>
                   <strong>Score:</strong>{" "}
-                  <span style={{ color: getScoreColor(item.score), fontWeight: "bold" }}>{item.score.toFixed(1)}</span>
+                  <span style={{ color: getScoreColor(item.score), fontWeight: "bold" }}>
+                    {item.score.toFixed(1)}
+                  </span>
                 </p>
                 <p>
                   <strong>AI Feedback:</strong>
@@ -307,7 +352,6 @@ function App() {
         </div>
       )}
 
-      {/* Add simple dot animation */}
       <style>
         {`
           @keyframes blink {
