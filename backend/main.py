@@ -51,9 +51,14 @@ ensure_db()
 # ================= FASTAPI SETUP =================
 app = FastAPI()
 
+origins = [
+    "https://ai-interview-coach-aeu6am17o-akshays-projects-ccff1c85.vercel.app",
+    "http://localhost:3000",  # for local testing
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
