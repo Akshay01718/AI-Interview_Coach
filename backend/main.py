@@ -52,7 +52,7 @@ ensure_db()
 app = FastAPI()
 
 origins = [
-    "https://ai-interview-coach-cp9u9tphw-akshays-projects-ccff1c85.vercel.app",
+    "https://ai-interview-coach-six-self.vercel.app",
     "http://localhost:3000", 
       # for local testing
 ]
