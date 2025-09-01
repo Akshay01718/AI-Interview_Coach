@@ -56,14 +56,16 @@ origins = [
     "http://localhost:3000",  # for local testing
 ]
 
+# CORS: Allow all origins dynamically (safe for public API)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=origins,  # <-- you can replace "*" with a list of allowed domains if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# ================= Pydantic Schemas =================
 class StartSessionRequest(BaseModel):
     num_questions: int = 5
 
@@ -71,7 +73,7 @@ class SubmitAnswerRequest(BaseModel):
     session_id: str
     answer: str
 
-# ================= HELPER FUNCTIONS =================
+# ================= Helper Functions =================
 def save_conversation(session_id, conversation):
     db = SessionLocal()
     session = db.query(Session).filter(Session.session_id == session_id).first()

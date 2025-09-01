@@ -24,13 +24,19 @@ function App() {
   const recognitionRef = useRef(null);
   const [listening, setListening] = useState(false);
 
-const API_URL = process.env.REACT_APP_API_URL.trim().replace(/\/+$/, "");
+  // Ensure no trailing slash
+  const API_URL = process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL.replace(/\/+$/, "")
+    : "";
 
   const startSession = async () => {
     if (numQuestions < 5 || numQuestions > 20)
       return alert("Please choose between 5 and 20 questions.");
+
     try {
-      const res = await axios.post(`${API_URL}/start_session`, { num_questions: numQuestions });
+      const res = await axios.post(`${API_URL}/start_session`, {
+        num_questions: numQuestions,
+      });
 
       setSessionId(res.data.session_id);
       setCurrentQuestion(res.data.question);
@@ -42,19 +48,20 @@ const API_URL = process.env.REACT_APP_API_URL.trim().replace(/\/+$/, "");
       setQuestionsCount(1);
     } catch (error) {
       console.error("Error starting session:", error);
-      alert("Could not start session. Make sure backend is running.");
+      alert(
+        "Could not start session. Make sure backend is running and CORS is configured properly."
+      );
     }
   };
 
   const handleSubmit = async () => {
     if (!answer.trim()) return alert("Please type or speak your answer.");
-
     setLoadingNextQuestion(true);
 
     try {
       const res = await axios.post(`${API_URL}/submit_answer`, {
         session_id: sessionId,
-        answer: answer,
+        answer,
       });
 
       setScore(res.data.score);
@@ -85,7 +92,9 @@ const API_URL = process.env.REACT_APP_API_URL.trim().replace(/\/+$/, "");
       }
     } catch (error) {
       console.error("Error submitting answer:", error);
-      alert("Could not reach backend. Make sure it is running.");
+      alert(
+        "Could not reach backend. Make sure it is running and CORS is configured properly."
+      );
       setLoadingNextQuestion(false);
     }
   };
@@ -109,6 +118,7 @@ const API_URL = process.env.REACT_APP_API_URL.trim().replace(/\/+$/, "");
 
   const getScoreColor = (score) =>
     score >= 80 ? "#4caf50" : score >= 50 ? "#ff9800" : "#f44336";
+
   const progress = finished
     ? 100
     : questionsCount > 0
