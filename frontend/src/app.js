@@ -24,7 +24,7 @@ function App() {
   const recognitionRef = useRef(null);
   const [listening, setListening] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL.trim().replace(/\/+$/, "");
 
   const startSession = async () => {
     if (numQuestions < 5 || numQuestions > 20)
