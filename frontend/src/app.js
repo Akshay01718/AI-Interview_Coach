@@ -30,9 +30,8 @@ const API_URL = process.env.REACT_APP_API_URL.trim().replace(/\/+$/, "");
     if (numQuestions < 5 || numQuestions > 20)
       return alert("Please choose between 5 and 20 questions.");
     try {
-      const res = await axios.post(`${API_URL}/start_session`, {
-        num_questions: numQuestions,
-      });
+      const res = await axios.post(`${API_URL}/start_session`, { num_questions: numQuestions });
+
       setSessionId(res.data.session_id);
       setCurrentQuestion(res.data.question);
       setAnswer("");
